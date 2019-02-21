@@ -21,6 +21,8 @@ namespace Calculator.Test.Unit
             uut = new Unit_testing_Calculator.Calculator();
         }
 
+        [TestCase(8, 7, 15)]
+        [TestCase(3, 7, 10)]
         [TestCase(3,2,5)]
         [TestCase(2,2,4)]
         [TestCase(-2,-2,-4)]
