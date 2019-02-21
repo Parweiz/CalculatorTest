@@ -21,6 +21,7 @@ namespace Calculator.Test.Unit
             uut = new Unit_testing_Calculator.Calculator();
         }
 
+
         [TestCase(8, 7, 15)]
         [TestCase(3, 7, 10)]
         [TestCase(3,2,5)]
@@ -65,6 +66,109 @@ namespace Calculator.Test.Unit
             Assert.That(uut.Power(a, b), Is.EqualTo(result));
         }
 
+
+        [Test]
+        public void Divide_DivideByZero_ThrowsException()
+        {
+            Assert.That(() => uut.Divide(3, 0), Throws.TypeOf<DivideByZeroException>());
+        }
+
+        [TestCase(9, 3, 3)]
+        [TestCase(25, 5, 5)]
+        [TestCase(144, 12, 12)]
+        [TestCase(36, 6, 6)]
+        [TestCase(81, 9, 9)]
+        [TestCase(0, -3, 0)]
+        [TestCase(0, -1, 0)]
+        [TestCase(0, 1, 0)]
+        [TestCase(0, 7, 0)]
+        [TestCase(1, 7, (1.0 / 7.0))]
+        [TestCase(7, -3, -(7.0 / 3.0))]
+        public void Divide_DividePositiveNumber_ReturnsSpecificAnswer(int a, int b, double result)
+        {
+            Assert.That(uut.Divide(a, b), Is.EqualTo(result));
+        }
+
+        [Test]
+        public void Add_2ParameterVersion_AccumulatorEqualsResult()
+        {
+            uut.Add(3, 4);
+
+            Assert.That(uut.Accumulator, Is.EqualTo(7));
+        }
+
+        [Test]
+        public void Subtract_2ParameterVersion_AccumulatorEqualsResult()
+        {
+            uut.Subtract(3, 4);
+
+            Assert.That(uut.Accumulator, Is.EqualTo(-1));
+        }
+
+        [Test]
+        public void Multiply_2ParameterVersion_AccumulatorEqualsResult()
+        {
+            uut.Multiply(3, 4);
+
+            Assert.That(uut.Accumulator, Is.EqualTo(12));
+        }
+
+        [Test]
+        public void Divide_2ParameterVersion_AccumulatorEqualsResult()
+        {
+            uut.Divide(3, 4);
+
+            Assert.That(uut.Accumulator, Is.EqualTo(0.75));
+        }
+
+        [Test]
+        public void Power_2ParameterVersion_AccumulatorEqualsResult()
+        {
+            uut.Power(2, 0.5);
+
+            Assert.That(uut.Accumulator, Is.EqualTo(1.41).Within(0.005));
+        }
+
+
+        [Test]
+        public void Add_1ParameterVersion_BuildsOnPreviousResult()
+        {
+            uut.Add(2, 3);  // Accumulator is now 5, should be used in next calculation
+            Assert.That(uut.Add(4), Is.EqualTo(9));
+        }
+        [Test]
+        public void Subtract_1ParameterVersion_BuildsOnPreviousResult()
+        {
+            uut.Add(2, 3);  // Accumulator is now 5, should be used in next calculation
+            Assert.That(uut.Subtract(4), Is.EqualTo(1));
+        }
+
+
+
+
+        [Test]
+        public void Power_1ParameterVersion_AccumulatorCorrect()
+        {
+            uut.Add(2, 3);  // Accumulator is now 5, should be used in next calculation
+            uut.Power(2);
+            Assert.That(uut.Accumulator, Is.EqualTo(25));
+        }
+
+        [Test]
+        public void Divide_1ParameterDivideByZero_ThrowsException()
+        {
+            uut.Add(2, 3);
+            Assert.That(() => uut.Divide(0), Throws.TypeOf<DivideByZeroException>());
+        }
+
+        [TestCase(-2, 0.5)]
+        [TestCase(-2, (1.0 / 3.0))]
+        [TestCase(0, -1)]
+        public void Power_1ParameterIncorrectParameters_ThrowsException(double b, double exp)
+        {
+            uut.Add(b, 0);
+            Assert.That(() => uut.Power(exp), Throws.TypeOf<ArgumentOutOfRangeException>());
+        }
 
         /*
         [Test]
